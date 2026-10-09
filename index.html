@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#14213d">
+<title>الراعي</title>
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#14213d;--gold:#c9a24b;--cream:#faf6ec;--ink:#1b1b1b;--mut:#7b7b7b;--ok:#2e9e5b;--warn:#e0a526;--bad:#c8433a}
+*{box-sizing:border-box;margin:0;font-family:Cairo,sans-serif}
+body{background:var(--cream);color:var(--ink);padding-top:env(safe-area-inset-top)}
+.hide{display:none!important}
+header{background:var(--navy);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5}
+header h1{font-size:20px;color:var(--gold);flex:1}
+button{cursor:pointer;border:0;border-radius:12px;padding:10px 16px;font-size:15px;background:var(--navy);color:#fff}
+button.g{background:var(--gold);color:var(--navy);font-weight:700}
+button.l{background:#fff;color:var(--navy);border:1px solid #ddd}
+.ic{background:none;color:#fff;font-size:24px;padding:4px 8px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #ddd;border-radius:12px;font-size:15px;background:#fff;margin-top:4px}
+label{font-size:13px;color:var(--mut);display:block;margin-top:10px}
+.wrap{padding:14px;max-width:640px;margin:auto}
+.card{background:#fff;border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px #0001;display:flex;align-items:center;gap:12px;cursor:pointer}
+.card b{font-size:16px}.card small{color:var(--mut)}
+.dot{width:12px;height:12px;border-radius:50%;flex:none}
+.bar{display:flex;gap:8px;margin-bottom:12px}
+.pct{font-weight:700;font-size:15px}
+#login{min-height:100vh;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;color:#fff;gap:14px}
+#login h1{color:var(--gold);font-size:38px}
+#login input{max-width:300px;text-align:center}
+.photo{width:110px;height:110px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;background:#2a3a63;display:flex;align-items:center;justify-content:center;font-size:48px;cursor:pointer}
+#menu{position:fixed;inset:0;background:#0007;z-index:9}
+#menu div{background:#fff;width:270px;height:100%;margin-right:0;padding:20px;display:flex;flex-direction:column;gap:6px}
+#menu button{background:none;color:var(--navy);text-align:right;font-size:16px;padding:12px}
+#sortm{position:absolute;background:#fff;border-radius:12px;box-shadow:0 4px 16px #0003;padding:6px;z-index:6}
+#sortm button{display:block;width:100%;background:none;color:var(--navy);text-align:right}
+.banner{background:var(--gold);color:var(--navy);padding:10px;border-radius:12px;margin-bottom:10px;font-weight:600}
+.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee}
+.chip{display:inline-block;background:var(--cream);border-radius:8px;padding:4px 10px;margin:3px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:20px;z-index:20}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="photo" id="lphoto">✝</div>
+  <h1>الراعي</h1>
+  <div>أبونا يوسف فام</div>
+  <input id="pw" type="password" placeholder="كلمة السر" autocomplete="current-password">
+  <button class="g" id="lbtn">دخول</button>
+  <div id="lerr" style="color:#ff8a80"></div>
+</div>
+
+<div id="app" class="hide">
+  <header>
+    <button class="ic" id="mbtn">☰</button>
+    <h1 id="title">الراعي</h1>
+    <button class="ic" id="back" class="hide">›</button>
+  </header>
+  <div class="wrap" id="view"></div>
+</div>
+
+<div id="menu" class="hide"><div>
+  <div class="photo" id="mphoto" style="margin:auto;width:80px;height:80px;font-size:32px;padding:0">✝</div>
+  <b style="text-align:center;color:var(--navy)">أبونا يوسف فام</b>
+  <button data-a="list">👥 المعترفين</button>
+  <button data-a="stats">📊 إحصائيات</button>
+  <button data-a="remind">⏰ فكرني</button>
+  <button data-a="notif">🔔 الإشعارات</button>
+  <button data-a="add">➕ إضافة معترف</button>
+  <button data-a="bulk">📋 إضافة جماعية</button>
+  <button data-a="photo">🖼️ صورة أبونا</button>
+  <button data-a="pass">🔑 تغيير كلمة السر</button>
+  <button data-a="out">🚪 تسجيل خروج</button>
+</div></div>
+<input type="file" id="pfile" accept="image/*" class="hide">
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged,updatePassword,reauthenticateWithCredential,EmailAuthProvider} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,collection,onSnapshot,addDoc,setDoc,updateDoc,deleteDoc,doc,getDoc,writeBatch,arrayUnion} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getMessaging,getToken} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+
+// ====== حط بيانات مشروع Firebase بتاعك هنا ======
+const firebaseConfig={apiKey:"",authDomain:"",projectId:"",appId:""};
+const VAPID=""; // Firebase > Project settings > Cloud Messaging > Web Push certificates
+const EMAIL="abouna@elraai.app"; // الإيميل الداخلي اللي هتعمله في Firebase Auth
+// ===============================================
+
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const $=s=>document.querySelector(s),V=$("#view");
+let people=[],sortBy="name",asc=true,q="",unsub=null;
+const toast=m=>{const t=document.createElement("div");t.id="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2200)};
+const short=n=>(n||"").trim().split(/\s+/).slice(0,2).join(" ");
+const mk=d=>d.slice(0,7);
+const monthsBetween=(a,b)=>(b.getFullYear()-a.getFullYear())*12+b.getMonth()-a.getMonth();
+const dts=p=>(p.confessions||[]).slice().sort();
+const last=p=>dts(p).slice(-1)[0];
+function stats(p){
+  const now=new Date(),c=dts(p);
+  const start=p.created?new Date(p.created):now;
+  const win=Math.max(1,Math.min(12,monthsBetween(start,now)+1));
+  const set=new Set(c.map(mk));let hit=0;
+  for(let i=0;i<win;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1);if(set.has(mk(d.toISOString()))||set.has(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")))hit++}
+  const l=c.slice(-1)[0],days=l?Math.floor((now-new Date(l))/864e5):null;
+  return{pct:Math.round(hit/win*100),days,color:days==null?"#bbb":days<=31?"var(--ok)":days<=62?"var(--warn)":"var(--bad)"};
+}
+const ago=d=>d==null?"لم يعترف بعد":d<=0?"النهارده":d<31?`من ${d} يوم`:`من ${Math.floor(d/30)} شهر`;
+
+// ---------- دخول ----------
+$("#lbtn").onclick=async()=>{try{await signInWithEmailAndPassword(auth,EMAIL,$("#pw").value);$("#pw").value=""}catch(e){$("#lerr").textContent="كلمة السر غلط"}};
+$("#pw").onkeydown=e=>e.key=="Enter"&&$("#lbtn").click();
+onAuthStateChanged(auth,async u=>{
+  $("#login").classList.toggle("hide",!!u);$("#app").classList.toggle("hide",!u);
+  if(unsub){unsub();unsub=null}
+  if(u){
+    unsub=onSnapshot(collection(db,"people"),s=>{people=s.docs.map(d=>({id:d.id,...d.data()}));if(cur=="list")list()});
+    onSnapshot(collection(db,"tasks"),x=>{tasks=x.docs.map(d=>({id:d.id,...d.data()}));if(cur=="remind")remind();if(cur=="list")list()});
+    const s=await getDoc(doc(db,"settings","main"));S=s.exists()?s.data():{};if(S.photo)setPhoto(S.photo);
+    go("list");
+  }
+});
+function setPhoto(src){for(const id of["#mphoto","#lphoto"]){const e=$(id);e.innerHTML=`<img src="${src}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`}}
+
+// ---------- منيو ----------
+const menu=$("#menu");
+$("#mbtn").onclick=()=>menu.classList.remove("hide");
+menu.onclick=e=>{if(e.target==menu)menu.classList.add("hide")};
+menu.querySelectorAll("[data-a]").forEach(b=>b.onclick=async()=>{
+  menu.classList.add("hide");const a=b.dataset.a;
+  if(a=="out")signOut(auth);else if(a=="photo")$("#pfile").click();else go(a);
+});
+$("#pfile").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{const im=new Image();im.onload=async()=>{
+    const c=document.createElement("canvas");c.width=c.height=240;const x=c.getContext("2d");
+    const s=Math.min(im.width,im.height);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,240,240);
+    const d=c.toDataURL("image/jpeg",.8);await setDoc(doc(db,"settings","main"),{photo:d},{merge:true});setPhoto(d);toast("تم حفظ الصورة")};im.src=r.result};
+  r.readAsDataURL(f);
+};
+
+// ---------- راوتر ----------
+let cur="list";
+function go(v,id){cur=v;$("#back").classList.toggle("hide",v=="list");$("#back").onclick=()=>go("list");
+  ({list,add:()=>form(),bulk,pass,stats:statsView,remind,notif,person:()=>person(id),edit:()=>form(id)})[v]();}
+$("#back").classList.add("hide");
+
+// ---------- القائمة ----------
+function list(){
+  $("#title").textContent="الراعي";
+  const today=new Date(),bd=people.filter(p=>p.birthday&&new Date(p.birthday).getDate()==today.getDate()&&new Date(p.birthday).getMonth()==today.getMonth());
+  let a=people.filter(p=>!q||(p.name||"").includes(q)||(p.phone||"").includes(q));
+  a.sort((x,y)=>sortBy=="name"?(x.name||"").localeCompare(y.name||"","ar"):(x.confessions||[]).length-(y.confessions||[]).length);
+  if(!asc)a.reverse();
+  V.innerHTML=`${dueB()}${bd.map(p=>`<div class="banner">🎂 النهارده عيد ميلاد ${short(p.name)}</div>`).join("")}
+  <div class="bar"><input id="sq" placeholder="🔍 بحث بالاسم أو التليفون" value="${q}" style="margin:0">
+  <button class="l" id="sb">${asc?"↑":"↓"} ترتيب</button></div>
+  <div style="color:var(--mut);font-size:13px;margin-bottom:8px">${a.length} معترف — حسب ${sortBy=="name"?"الأبجدية":"عدد مرات الاعتراف"}</div>
+  ${a.map(p=>{const s=stats(p);return`<div class="card" data-id="${p.id}"><span class="dot" style="background:${s.color}"></span><div style="flex:1"><b>${short(p.name)}</b><br><small>${ago(s.days)}</small></div><div style="text-align:center"><div class="pct">${s.pct}%</div><small>${(p.confessions||[]).length} اعتراف</small></div></div>`}).join("")||'<p style="text-align:center;color:var(--mut);margin-top:40px">مفيش معترفين لسه — أضف من المنيو</p>'}`;
+  const sq=$("#sq");sq.oninput=()=>{q=sq.value;const pos=sq.selectionStart;list();const n=$("#sq");n.focus();n.setSelectionRange(pos,pos)};
+  V.querySelectorAll(".card").forEach(c=>c.onclick=()=>go("person",c.dataset.id));
+  $("#sb").onclick=e=>{
+    document.getElementById("sortm")?.remove();const m=document.createElement("div");m.id="sortm";
+    m.innerHTML=`<button data-s="name,1">↑ الأبجدية (أ → ي)</button><button data-s="name,0">↓ الأبجدية (ي → أ)</button><button data-s="count,0">↓ الأكثر اعترافاً</button><button data-s="count,1">↑ الأقل اعترافاً</button>`;
+    const r=e.target.getBoundingClientRect();m.style.top=r.bottom+window.scrollY+"px";m.style.left=r.left+"px";document.body.append(m);
+    m.querySelectorAll("button").forEach(b=>b.onclick=()=>{const[s,d]=b.dataset.s.split(",");sortBy=s;asc=d=="1";m.remove();list()});
+    setTimeout(()=>document.addEventListener("click",()=>m.remove(),{once:true}),0);
+  };
+}
+
+// ---------- صفحة الشخص ----------
+function person(id){
+  const p=people.find(x=>x.id==id);if(!p)return go("list");const s=stats(p);
+  $("#title").textContent=short(p.name);
+  const row=(k,v)=>v?`<div class="row"><span style="color:var(--mut)">${k}</span><span>${v}</span></div>`:"";
+  V.innerHTML=`<div style="background:#fff;border-radius:16px;padding:14px">
+   <div style="text-align:center;margin-bottom:8px"><div class="pct" style="font-size:34px;color:${s.color}">${s.pct}%</div><small>نسبة الانتظام (شهرياً) — ${ago(s.days)}</small></div>
+   ${row("الاسم بالكامل",p.name)}${row("التليفون",p.phone?`<a href="tel:${p.phone}">${p.phone}</a>`:"")}${row("السن",p.age)}${row("عيد الميلاد",p.birthday)}${row("العنوان",p.address)}
+   ${row("الحالة الاجتماعية",p.marital+(p.marital=="متزوج"&&p.kids!=null?` — ${p.kids} أولاد`:""))}${row("ملاحظات",p.notes)}
+   <div style="margin-top:12px"><b>مرات الاعتراف (${(p.confessions||[]).length})</b><br>
+   ${dts(p).reverse().map(d=>`<span class="chip">${d} <a href="#" data-del="${d}" style="color:var(--bad);text-decoration:none">✕</a></span>`).join("")||"<small>لا يوجد</small>"}</div></div>
+   ${tasks.filter(t=>t.pid==id&&!t.done).map(t=>`<div class="banner" style="margin-top:10px">⏰ ${t.text}</div>`).join("")}
+   <div class="bar" style="margin-top:12px"><button class="g" id="c1" style="flex:1">✝ سجّل اعتراف اليوم</button><input type="date" id="cd" style="width:150px;margin:0"></div>
+   <div class="bar"><button class="l" id="ed" style="flex:1">تعديل</button><button class="l" id="rm" style="flex:1;color:var(--bad)">حذف</button></div>`;
+  const save=async d=>{await updateDoc(doc(db,"people",id),{confessions:[...new Set([...(p.confessions||[]),d])]});toast("تم التسجيل")};
+  $("#c1").onclick=()=>save($("#cd").value||new Date().toISOString().slice(0,10));
+  V.querySelectorAll("[data-del]").forEach(a=>a.onclick=async e=>{e.preventDefault();if(confirm("حذف هذا التاريخ؟"))await updateDoc(doc(db,"people",id),{confessions:p.confessions.filter(x=>x!=a.dataset.del)})});
+  $("#ed").onclick=()=>go("edit",id);
+  $("#rm").onclick=async()=>{if(confirm("حذف "+short(p.name)+" نهائياً؟")){await deleteDoc(doc(db,"people",id));go("list")}};
+}
+
+// ---------- إضافة/تعديل ----------
+function form(id){
+  const p=id?people.find(x=>x.id==id):{};$("#title").textContent=id?"تعديل":"إضافة معترف";
+  const f=(k,l,t="text")=>`<label>${l}</label><input id="f_${k}" type="${t}" value="${p[k]??""}">`;
+  V.innerHTML=`<div style="background:#fff;border-radius:16px;padding:14px">
+   ${f("name","الاسم بالكامل *")}${f("phone","التليفون","tel")}${f("age","السن","number")}${f("birthday","عيد الميلاد","date")}${f("address","العنوان")}
+   <label>الحالة الاجتماعية</label><select id="f_marital">${["","أعزب","متزوج","أرمل","مخطوب"].map(o=>`<option ${p.marital==o?"selected":""}>${o}</option>`).join("")}</select>
+   <div id="kw" class="${p.marital=="متزوج"?"":"hide"}">${f("kids","عدد الأولاد","number")}</div>
+   <label>ملاحظات</label><textarea id="f_notes" rows="3">${p.notes||""}</textarea>
+   <button class="g" id="sv" style="width:100%;margin-top:14px">${id?"حفظ":"حفظ وإضافة التالي"}</button></div>`;
+  $("#f_marital").onchange=e=>$("#kw").classList.toggle("hide",e.target.value!="متزوج");
+  $("#sv").onclick=async()=>{
+    const g=k=>$("#f_"+k)?.value.trim(),d={name:g("name"),phone:g("phone"),age:g("age"),birthday:g("birthday"),address:g("address"),marital:g("marital"),kids:g("marital")=="متزوج"?g("kids"):"",notes:g("notes")};
+    if(!d.name)return toast("اكتب الاسم");
+    if(id)await updateDoc(doc(db,"people",id),d);else await addDoc(collection(db,"people"),{...d,confessions:[],created:new Date().toISOString()});
+    toast("تم الحفظ");id?go("person",id):form();
+  };
+}
+
+// ---------- إضافة جماعية ----------
+function bulk(){
+  $("#title").textContent="إضافة جماعية";
+  V.innerHTML=`<div style="background:#fff;border-radius:16px;padding:14px"><p style="font-size:14px;color:var(--mut)">الصق قائمة، كل شخص في سطر: <b>الاسم، التليفون</b> (التليفون اختياري). تقدر تلصق من Excel كمان.</p>
+  <textarea id="bt" rows="12" placeholder="مينا جرجس سمير، 01012345678"></textarea>
+  <input type="file" id="bf" accept=".csv,.txt" style="margin-top:8px"><button class="g" id="bs" style="width:100%;margin-top:10px">إضافة الكل</button></div>`;
+  $("#bf").onchange=e=>e.target.files[0]?.text().then(t=>$("#bt").value=t);
+  $("#bs").onclick=async()=>{
+    const rows=$("#bt").value.split("\n").map(l=>l.split(/[,،\t]/).map(x=>x.trim())).filter(r=>r[0]);
+    if(!rows.length)return;
+    for(let i=0;i<rows.length;i+=400){const b=writeBatch(db);
+      rows.slice(i,i+400).forEach(r=>b.set(doc(collection(db,"people")),{name:r[0],phone:r[1]||"",confessions:[],created:new Date().toISOString()}));await b.commit()}
+    toast(`تمت إضافة ${rows.length}`);go("list");
+  };
+}
+
+// ---------- تغيير الباسورد ----------
+function pass(){
+  $("#title").textContent="تغيير كلمة السر";
+  V.innerHTML=`<div style="background:#fff;border-radius:16px;padding:14px"><label>كلمة السر الحالية</label><input id="p0" type="password"><label>كلمة السر الجديدة (6 حروف على الأقل)</label><input id="p1" type="password">
+  <button class="g" id="ps" style="width:100%;margin-top:14px">تغيير</button></div>`;
+  $("#ps").onclick=async()=>{try{
+    await reauthenticateWithCredential(auth.currentUser,EmailAuthProvider.credential(EMAIL,$("#p0").value));
+    await updatePassword(auth.currentUser,$("#p1").value);toast("تم تغيير كلمة السر");go("list");
+  }catch(e){toast("كلمة السر الحالية غلط أو الجديدة ضعيفة")}};
+}
+
+let tasks=[],S={},sm=3;
+const absM=p=>{const l=last(p)||p.created;return l?Math.floor((Date.now()-new Date(l))/864e5/30.44):0};
+const fmtM=m=>{const y=Math.floor(m/12),r=m%12;return[y?(y==1?"سنة":y==2?"سنتين":y+" سنين"):"",r?(r==1?"شهر":r==2?"شهرين":r+" شهور"):""].filter(Boolean).join(" و ")||"أقل من شهر"};
+const dueB=()=>tasks.filter(t=>!t.done&&t.due&&new Date(t.due)<=new Date()).map(t=>`<div class="banner">⏰ ${t.text}${t.pid?" — "+short(people.find(p=>p.id==t.pid)?.name):""}</div>`).join("");
+
+function statsView(){
+  $("#title").textContent="إحصائيات";
+  V.innerHTML=`<div class="card" style="cursor:default;display:block"><label style="margin:0">اللي بقالهم (شهور) أو أكتر</label>
+  <input id="sm" type="number" min="1" value="${sm}"><div style="margin-top:8px">${[1,2,3,6,12].map(n=>`<button class="l" data-n="${n}" style="margin:3px">${n==12?"سنة":n+" شهر"}</button>`).join("")}</div></div><div id="sl"></div>`;
+  const draw=()=>{const a=people.map(p=>({p,m:absM(p)})).filter(x=>x.m>=sm).sort((x,y)=>y.m-x.m);
+    $("#sl").innerHTML=`<div style="color:var(--mut);font-size:13px;margin-bottom:8px">${a.length} شخص</div>`+a.map(x=>`<div class="card" data-id="${x.p.id}"><span class="dot" style="background:${x.m>=6?"var(--bad)":"var(--warn)"}"></span><div style="flex:1"><b>${short(x.p.name)}</b><br><small>بقاله ${fmtM(x.m)} ${last(x.p)?"من آخر اعتراف":"(لم يعترف منذ إضافته)"}</small></div><small>${x.p.phone||""}</small></div>`).join("");
+    $("#sl").querySelectorAll(".card").forEach(c=>c.onclick=()=>go("person",c.dataset.id))};
+  $("#sm").oninput=e=>{sm=Math.max(1,+e.target.value||1);draw()};
+  V.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{sm=+b.dataset.n;$("#sm").value=sm;draw()});draw();
+}
+
+function remind(){
+  $("#title").textContent="فكرني";
+  const od=[...tasks].sort((a,b)=>(a.done-b.done)||((a.due||"9")>(b.due||"9")?1:-1));
+  V.innerHTML=`<div style="background:#fff;border-radius:16px;padding:14px;margin-bottom:12px"><input id="tt" placeholder="المهمة">
+  <select id="tp"><option value="">بدون ربط بشخص</option>${[...people].sort((a,b)=>(a.name||"").localeCompare(b.name||"","ar")).map(p=>`<option value="${p.id}">${p.name}</option>`).join("")}</select>
+  <label>منبه (اختياري)</label><input id="td" type="datetime-local"><button class="g" id="ta" style="width:100%;margin-top:10px">إضافة</button></div>
+  ${od.map(t=>`<div class="card" style="cursor:default"><input type="checkbox" data-c="${t.id}" ${t.done?"checked":""} style="width:22px;margin:0"><div style="flex:1;${t.done?"text-decoration:line-through;opacity:.5":""}"><b>${t.text}</b><br><small>${t.pid?short(people.find(p=>p.id==t.pid)?.name)+" • ":""}${t.due?new Date(t.due).toLocaleString("ar-EG",{dateStyle:"medium",timeStyle:"short"}):""}</small></div><button class="l" data-x="${t.id}">✕</button></div>`).join("")}`;
+  $("#ta").onclick=async()=>{const text=$("#tt").value.trim();if(!text)return;const d=$("#td").value;
+    await addDoc(collection(db,"tasks"),{text,pid:$("#tp").value,due:d?new Date(d).toISOString():"",done:false,notified:false})};
+  V.querySelectorAll("[data-c]").forEach(c=>c.onchange=()=>updateDoc(doc(db,"tasks",c.dataset.c),{done:c.checked}));
+  V.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>deleteDoc(doc(db,"tasks",b.dataset.x)));
+}
+
+function notif(){
+  $("#title").textContent="الإشعارات";
+  const hrs=(v)=>[...Array(24).keys()].map(h=>`<option value="${h}" ${h==v?"selected":""}>${h}:00</option>`).join("");
+  V.innerHTML=`<div style="background:#fff;border-radius:16px;padding:14px">
+  <button class="g" id="en" style="width:100%">🔔 فعّل الإشعارات على الموبايل ده</button>
+  <label>عيد الميلاد: ابعتلي الساعة</label><select id="n_bh">${hrs(S.birthdayHour??8)}</select>
+  <label>إشعار الغائبين</label><select id="n_sf"><option value="off">مقفول</option><option value="daily">يومي</option><option value="weekly">أسبوعي (الأحد)</option><option value="monthly">شهري (أول الشهر)</option></select>
+  <label>الساعة</label><select id="n_sh">${hrs(S.statsHour??9)}</select>
+  <label>الغائب = بقاله (شهور) أو أكتر</label><input id="n_sm" type="number" min="1" value="${S.statsMonths??3}">
+  <button class="g" id="ns" style="width:100%;margin-top:14px">حفظ</button>
+  <p style="font-size:12px;color:var(--mut);margin-top:10px">منبهات «فكرني» بتتبعت في وقتها تلقائياً. الإشعارات محتاجة Cloud Function (ملف functions/index.js).</p></div>`;
+  $("#n_sf").value=S.statsFreq||"off";
+  $("#en").onclick=async()=>{try{
+    if(await Notification.requestPermission()!="granted")return toast("اسمح بالإشعارات من إعدادات المتصفح");
+    const reg=await navigator.serviceWorker.register("firebase-messaging-sw.js");
+    const t=await getToken(getMessaging(app),{vapidKey:VAPID,serviceWorkerRegistration:reg});
+    await setDoc(doc(db,"settings","main"),{tokens:arrayUnion(t)},{merge:true});toast("تم تفعيل الإشعارات")}catch(e){toast("فشل التفعيل — راجع VAPID key")}};
+  $("#ns").onclick=async()=>{S={...S,birthdayHour:+$("#n_bh").value,statsFreq:$("#n_sf").value,statsHour:+$("#n_sh").value,statsMonths:+$("#n_sm").value||3};
+    const{photo,tokens,...o}=S;await setDoc(doc(db,"settings","main"),o,{merge:true});toast("تم الحفظ")};
+}
+if("serviceWorker"in navigator&&location.protocol.startsWith("http"))addEventListener("load",()=>{});
+</script>
+</body>
+</html>
