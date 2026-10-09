@@ -83,12 +83,16 @@ import {getFirestore,collection,onSnapshot,addDoc,setDoc,updateDoc,deleteDoc,doc
 import {getMessaging,getToken} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
 // ====== حط بيانات مشروع Firebase بتاعك هنا ======
-const firebaseConfig={apiKey:"",authDomain:"",projectId:"",appId:""};
+const firebaseConfig={apiKey:"AIzaSyB3CBfMYV4r-1tDQNlcF907JZd5-4Q_RGU",authDomain:"elra3y-fc929.firebaseapp.com",projectId:"elra3y-fc929",appId:"1:447597783785:web:74e89624c990f10659de78"};
 const VAPID=""; // Firebase > Project settings > Cloud Messaging > Web Push certificates
-const EMAIL="abouna@elraai.app"; // الإيميل الداخلي اللي هتعمله في Firebase Auth
+const EMAIL="davidaziz319@gmail.com"; // الإيميل الداخلي اللي هتعمله في Firebase Auth
 // ===============================================
 
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+let app,auth,db;
+try{
+  if(!firebaseConfig.apiKey)throw new Error("firebaseConfig فاضي");
+  app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);
+}catch(e){document.querySelector("#lerr").textContent="خطأ إعداد: "+e.message};
 const $=s=>document.querySelector(s),V=$("#view");
 let people=[],sortBy="name",asc=true,q="",unsub=null;
 const toast=m=>{const t=document.createElement("div");t.id="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2200)};
