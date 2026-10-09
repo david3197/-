@@ -6,39 +6,71 @@
 <meta name="theme-color" content="#14213d">
 <title>الراعي</title>
 <link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Reem+Kufi:wght@600&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#14213d;--gold:#c9a24b;--cream:#faf6ec;--ink:#1b1b1b;--mut:#7b7b7b;--ok:#2e9e5b;--warn:#e0a526;--bad:#c8433a}
+:root{--navy:#14213d;--navy2:#1d2f57;--gold:#c9a24b;--gold2:#e3c777;--cream:#faf6ec;--ink:#1b1b1b;--mut:#7b7b7b;--ok:#2e9e5b;--warn:#e0a526;--bad:#c8433a;--line:#ece5d3}
 *{box-sizing:border-box;margin:0;font-family:Cairo,sans-serif}
-body{background:var(--cream);color:var(--ink);padding-top:env(safe-area-inset-top)}
+body{background:var(--cream);color:var(--ink);min-height:100vh}
 .hide{display:none!important}
-header{background:var(--navy);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5}
-header h1{font-size:20px;color:var(--gold);flex:1}
+a{color:var(--navy)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.card:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+header{background:var(--navy);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;display:flex;align-items:center;gap:4px;position:sticky;top:0;z-index:5;border-bottom:2px solid var(--gold)}
+header h1{font-family:"Reem Kufi",Cairo,sans-serif;font-weight:600;font-size:24px;color:var(--gold);flex:1;padding-inline-start:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 button{cursor:pointer;border:0;border-radius:12px;padding:10px 16px;font-size:15px;background:var(--navy);color:#fff}
 button.g{background:var(--gold);color:var(--navy);font-weight:700}
 button.l{background:#fff;color:var(--navy);border:1px solid #ddd}
-.ic{background:none;color:#fff;font-size:24px;padding:4px 8px}
-input,select,textarea{width:100%;padding:11px;border:1px solid #ddd;border-radius:12px;font-size:15px;background:#fff;margin-top:4px}
-label{font-size:13px;color:var(--mut);display:block;margin-top:10px}
-.wrap{padding:14px;max-width:640px;margin:auto}
-.card{background:#fff;border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px #0001;display:flex;align-items:center;gap:12px;cursor:pointer}
-.card b{font-size:16px}.card small{color:var(--mut)}
-.dot{width:12px;height:12px;border-radius:50%;flex:none}
-.bar{display:flex;gap:8px;margin-bottom:12px}
-.pct{font-weight:700;font-size:15px}
-#login{min-height:100vh;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;color:#fff;gap:14px}
-#login h1{color:var(--gold);font-size:38px}
+.ic{background:none;color:#fff;font-size:26px;padding:2px 10px;line-height:1}
+
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid #ddd;border-radius:12px;font-size:15px;background:#fff;margin-top:4px;color:var(--ink)}
+label{font-size:13px;color:var(--mut);display:block;margin-top:12px}
+.wrap{padding:14px 14px calc(30px + env(safe-area-inset-bottom));max-width:640px;margin:auto}
+.panel{background:#fff;border-radius:16px;padding:16px;box-shadow:0 1px 4px #14213d14}
+
+.card{background:#fff;border-radius:14px;padding:13px 14px;margin-bottom:9px;box-shadow:0 1px 4px #14213d14;display:flex;align-items:center;gap:12px;cursor:pointer;border-inline-start:5px solid var(--st,#ccc)}
+.card b{font-size:16px;color:var(--navy)}
+.card small{color:var(--mut)}
+.side{text-align:center;flex:none}
+.pct{font-weight:700;font-size:16px}
+.bar{display:flex;gap:8px;margin-bottom:12px;position:relative}
+.bar input{margin:0}
+.bar button.l{display:flex;align-items:center;gap:6px;flex:none}
+.count{color:var(--mut);font-size:13px;margin:0 2px 8px}
+.banner{background:var(--gold);color:var(--navy);padding:11px 14px;border-radius:12px;margin-bottom:10px;font-weight:600}
+.row{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row span:first-child{color:var(--mut);flex:none}
+.row span:last-child{text-align:left}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:4px 10px;margin:3px}
+.chip a{color:var(--bad);text-decoration:none}
+.ring{width:104px;height:104px;border-radius:50%;background:conic-gradient(var(--c) calc(var(--p)*1%),#ece8dc 0);display:grid;place-items:center;margin:2px auto 6px}
+.ring span{width:82px;height:82px;border-radius:50%;background:#fff;display:grid;place-items:center;font-weight:700;font-size:24px;color:var(--navy)}
+.empty{text-align:center;color:var(--mut);margin-top:40px;line-height:1.9}
+
+#login{min-height:100vh;background:radial-gradient(circle at 50% 0,var(--navy2),var(--navy) 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;color:#fff;gap:14px}
+#login h1{font-family:"Reem Kufi",Cairo,sans-serif;font-weight:600;color:var(--gold);font-size:56px;line-height:1}
+#login .sub{color:#d9d3c0;margin-top:-6px}
 #login input{max-width:300px;text-align:center}
-.photo{width:110px;height:110px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;background:#2a3a63;display:flex;align-items:center;justify-content:center;font-size:48px;cursor:pointer}
-#menu{position:fixed;inset:0;background:#0007;z-index:9}
-#menu div{background:#fff;width:270px;height:100%;margin-right:0;padding:20px;display:flex;flex-direction:column;gap:6px}
-#menu button{background:none;color:var(--navy);text-align:right;font-size:16px;padding:12px}
-#sortm{position:absolute;background:#fff;border-radius:12px;box-shadow:0 4px 16px #0003;padding:6px;z-index:6}
-#sortm button{display:block;width:100%;background:none;color:var(--navy);text-align:right}
-.banner{background:var(--gold);color:var(--navy);padding:10px;border-radius:12px;margin-bottom:10px;font-weight:600}
-.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee}
-.chip{display:inline-block;background:var(--cream);border-radius:8px;padding:4px 10px;margin:3px}
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:20px;z-index:20}
+#login button{min-width:140px}
+#lerr{color:#ff9d94;min-height:22px;text-align:center;max-width:300px}
+.photo{width:112px;height:112px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;background:#2a3a63;display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--gold);overflow:hidden;cursor:pointer;flex:none}
+.photo.sm{width:84px;height:84px;font-size:34px;margin:6px auto 0}
+.photo img{width:100%;height:100%;object-fit:cover}
+
+#menu{position:fixed;inset:0;background:#0008;z-index:9;display:flex}
+#menu>div{background:#fff;width:280px;max-width:86%;height:100%;padding:calc(18px + env(safe-area-inset-top)) 14px 20px;display:flex;flex-direction:column;gap:2px;overflow:auto}
+#menu .nm{text-align:center;color:var(--navy);font-weight:700;margin:8px 0 12px}
+#menu button{background:none;color:var(--navy);text-align:right;font-size:16px;padding:12px;border-radius:10px}
+#menu button:hover{background:var(--cream)}
+#menu hr{border:0;border-top:1px solid var(--line);margin:8px 0}
+
+#sortm{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border-radius:12px;box-shadow:0 6px 20px #14213d33;padding:6px;z-index:6;min-width:200px}
+#sortm button{display:block;width:100%;background:none;color:var(--navy);text-align:right;border-radius:8px}
+#sortm button:hover{background:var(--cream)}
+#sortm button.on{color:var(--gold);font-weight:700}
+
+#toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:20px;z-index:20;border:1px solid var(--gold)}
 </style>
 </head>
 <body>
@@ -46,30 +78,32 @@ label{font-size:13px;color:var(--mut);display:block;margin-top:10px}
 <div id="login">
   <div class="photo" id="lphoto">✝</div>
   <h1>الراعي</h1>
-  <div>أبونا يوسف فام</div>
+  <div class="sub">أبونا يوسف فام</div>
   <input id="pw" type="password" placeholder="كلمة السر" autocomplete="current-password">
   <button class="g" id="lbtn">دخول</button>
-  <div id="lerr" style="color:#ff8a80"></div>
+  <div id="lerr"></div>
 </div>
 
 <div id="app" class="hide">
   <header>
-    <button class="ic" id="mbtn">☰</button>
+    <button class="ic" id="mbtn" aria-label="القائمة">☰</button>
+    <button class="ic hide" id="back" aria-label="رجوع">›</button>
     <h1 id="title">الراعي</h1>
-    <button class="ic" id="back" class="hide">›</button>
   </header>
   <div class="wrap" id="view"></div>
 </div>
 
 <div id="menu" class="hide"><div>
-  <div class="photo" id="mphoto" style="margin:auto;width:80px;height:80px;font-size:32px;padding:0">✝</div>
-  <b style="text-align:center;color:var(--navy)">أبونا يوسف فام</b>
+  <div class="photo sm" id="mphoto">✝</div>
+  <div class="nm">أبونا يوسف فام</div>
   <button data-a="list">👥 المعترفين</button>
   <button data-a="stats">📊 إحصائيات</button>
   <button data-a="remind">⏰ فكرني</button>
   <button data-a="notif">🔔 الإشعارات</button>
+  <hr>
   <button data-a="add">➕ إضافة معترف</button>
   <button data-a="bulk">📋 إضافة جماعية</button>
+  <hr>
   <button data-a="photo">🖼️ صورة أبونا</button>
   <button data-a="pass">🔑 تغيير كلمة السر</button>
   <button data-a="out">🚪 تسجيل خروج</button>
@@ -82,214 +116,267 @@ import {getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged,updatePass
 import {getFirestore,collection,onSnapshot,addDoc,setDoc,updateDoc,deleteDoc,doc,getDoc,writeBatch,arrayUnion} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {getMessaging,getToken} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
-// ====== حط بيانات مشروع Firebase بتاعك هنا ======
-const firebaseConfig={apiKey:"AIzaSyB3CBfMYV4r-1tDQNlcF907JZd5-4Q_RGU",authDomain:"elra3y-fc929.firebaseapp.com",projectId:"elra3y-fc929",appId:"1:447597783785:web:74e89624c990f10659de78"};
-const VAPID=""; // Firebase > Project settings > Cloud Messaging > Web Push certificates
-const EMAIL="davidaziz319@gmail.com"; // الإيميل الداخلي اللي هتعمله في Firebase Auth
-// ===============================================
+// ====== إعدادات Firebase ======
+const firebaseConfig={
+  apiKey:"AIzaSyB3CBfMYV4r-1tDQNlcF907JZd5-4Q_RGU",
+  authDomain:"elra3y-fc929.firebaseapp.com",
+  projectId:"elra3y-fc929",
+  storageBucket:"elra3y-fc929.firebasestorage.app",
+  messagingSenderId:"447597783785",
+  appId:"1:447597783785:web:74e89624c990f10659de78"
+};
+const VAPID=""; // Firebase > Project settings > Cloud Messaging > Web Push certificates (للإشعارات بس)
+const EMAIL="davidaziz319@gmail.com"; // لازم يكون نفس المستخدم في Firebase > Authentication > Users
+// ==============================
+
+const $=s=>document.querySelector(s),V=$("#view");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm=s=>(s||"").toLowerCase().replace(/[أإآ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/[\u064B-\u0652]/g,"");
+const toast=m=>{$("#toast")?.remove();const t=document.createElement("div");t.id="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2400)};
 
 let app,auth,db;
-try{
-  if(!firebaseConfig.apiKey)throw new Error("firebaseConfig فاضي");
-  app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);
-}catch(e){document.querySelector("#lerr").textContent="خطأ إعداد: "+e.message};
-const $=s=>document.querySelector(s),V=$("#view");
-let people=[],sortBy="name",asc=true,q="",unsub=null;
-const toast=m=>{const t=document.createElement("div");t.id="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2200)};
+try{app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app)}
+catch(e){$("#lerr").textContent="خطأ إعداد: "+(e.code||e.message)}
+
+let people=[],tasks=[],S={},cur="list",curId,sortBy="name",asc=true,q="",sm=3,unsubP=null,unsubT=null;
+
 const short=n=>(n||"").trim().split(/\s+/).slice(0,2).join(" ");
-const mk=d=>d.slice(0,7);
 const monthsBetween=(a,b)=>(b.getFullYear()-a.getFullYear())*12+b.getMonth()-a.getMonth();
 const dts=p=>(p.confessions||[]).slice().sort();
 const last=p=>dts(p).slice(-1)[0];
+const ym=(y,m)=>y+"-"+String(m+1).padStart(2,"0");
+const kt=n=>{n=+n;return n==1?"ولد واحد":n==2?"ولدين":n+" أولاد"};
+
 function stats(p){
   const now=new Date(),c=dts(p);
   const start=p.created?new Date(p.created):now;
   const win=Math.max(1,Math.min(12,monthsBetween(start,now)+1));
-  const set=new Set(c.map(mk));let hit=0;
-  for(let i=0;i<win;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1);if(set.has(mk(d.toISOString()))||set.has(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")))hit++}
-  const l=c.slice(-1)[0],days=l?Math.floor((now-new Date(l))/864e5):null;
+  const set=new Set(c.map(d=>d.slice(0,7)));let hit=0;
+  for(let i=0;i<win;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1);if(set.has(ym(d.getFullYear(),d.getMonth())))hit++}
+  const l=c[c.length-1],days=l?Math.floor((now-new Date(l))/864e5):null;
   return{pct:Math.round(hit/win*100),days,color:days==null?"#bbb":days<=31?"var(--ok)":days<=62?"var(--warn)":"var(--bad)"};
 }
 const ago=d=>d==null?"لم يعترف بعد":d<=0?"النهارده":d<31?`من ${d} يوم`:`من ${Math.floor(d/30)} شهر`;
+const absM=p=>{const l=last(p)||p.created;return l?Math.max(0,Math.floor((Date.now()-new Date(l))/864e5/30.44)):0};
+const fmtM=m=>{const y=Math.floor(m/12),r=m%12;return[y?(y==1?"سنة":y==2?"سنتين":y+" سنين"):"",r?(r==1?"شهر":r==2?"شهرين":r+" شهور"):""].filter(Boolean).join(" و ")||"أقل من شهر"};
+const dueB=()=>tasks.filter(t=>!t.done&&t.due&&new Date(t.due)<=new Date()).map(t=>`<div class="banner">⏰ ${esc(t.text)}${t.pid?" — "+esc(short(people.find(p=>p.id==t.pid)?.name)):""}</div>`).join("");
 
 // ---------- دخول ----------
-$("#lbtn").onclick=async()=>{try{await signInWithEmailAndPassword(auth,EMAIL,$("#pw").value);$("#pw").value=""}catch(e){$("#lerr").textContent="كلمة السر غلط"}};
+const loginErr=e=>{
+  const c=e.code||"";
+  if(c=="auth/invalid-credential"||c=="auth/wrong-password")return"كلمة السر غلط";
+  if(c=="auth/user-not-found")return"المستخدم ده مش موجود في Firebase (راجع Authentication > Users)";
+  if(c=="auth/too-many-requests")return"محاولات كتير، استنى شوية وجرّب تاني";
+  return"خطأ: "+(c||e.message);
+};
+$("#lbtn").onclick=async()=>{
+  if(!auth)return;const b=$("#lbtn");$("#lerr").textContent="";b.disabled=true;b.textContent="جارٍ الدخول…";
+  try{await signInWithEmailAndPassword(auth,EMAIL,$("#pw").value);$("#pw").value=""}
+  catch(e){$("#lerr").textContent=loginErr(e)}
+  b.disabled=false;b.textContent="دخول";
+};
 $("#pw").onkeydown=e=>e.key=="Enter"&&$("#lbtn").click();
-onAuthStateChanged(auth,async u=>{
-  $("#login").classList.toggle("hide",!!u);$("#app").classList.toggle("hide",!u);
-  if(unsub){unsub();unsub=null}
-  if(u){
-    unsub=onSnapshot(collection(db,"people"),s=>{people=s.docs.map(d=>({id:d.id,...d.data()}));if(cur=="list")list()});
-    onSnapshot(collection(db,"tasks"),x=>{tasks=x.docs.map(d=>({id:d.id,...d.data()}));if(cur=="remind")remind();if(cur=="list")list()});
-    const s=await getDoc(doc(db,"settings","main"));S=s.exists()?s.data():{};if(S.photo)setPhoto(S.photo);
-    go("list");
-  }
-});
-function setPhoto(src){for(const id of["#mphoto","#lphoto"]){const e=$(id);e.innerHTML=`<img src="${src}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`}}
 
-// ---------- منيو ----------
+const rerender=()=>{if(cur=="list")list();else if(cur=="remind")remind();else if(cur=="person"&&curId)person(curId)};
+if(auth)onAuthStateChanged(auth,async u=>{
+  $("#login").classList.toggle("hide",!!u);$("#app").classList.toggle("hide",!u);
+  unsubP?.();unsubT?.();unsubP=unsubT=null;
+  if(!u){people=[];tasks=[];S={};return}
+  unsubP=onSnapshot(collection(db,"people"),s=>{people=s.docs.map(d=>({id:d.id,...d.data()}));rerender()},()=>toast("تعذّر قراءة البيانات — راجع قواعد Firestore"));
+  unsubT=onSnapshot(collection(db,"tasks"),s=>{tasks=s.docs.map(d=>({id:d.id,...d.data()}));rerender()},()=>{});
+  try{const s=await getDoc(doc(db,"settings","main"));S=s.exists()?s.data():{};if(S.photo)setPhoto(S.photo)}catch(e){}
+  go("list");
+});
+function setPhoto(src){for(const id of["#mphoto","#lphoto"])$(id).innerHTML=`<img src="${src}" alt="">`}
+
+// ---------- المنيو ----------
 const menu=$("#menu");
 $("#mbtn").onclick=()=>menu.classList.remove("hide");
 menu.onclick=e=>{if(e.target==menu)menu.classList.add("hide")};
-menu.querySelectorAll("[data-a]").forEach(b=>b.onclick=async()=>{
+menu.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{
   menu.classList.add("hide");const a=b.dataset.a;
   if(a=="out")signOut(auth);else if(a=="photo")$("#pfile").click();else go(a);
 });
+$("#mphoto").onclick=()=>{menu.classList.add("hide");$("#pfile").click()};
 $("#pfile").onchange=e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{const im=new Image();im.onload=async()=>{
     const c=document.createElement("canvas");c.width=c.height=240;const x=c.getContext("2d");
     const s=Math.min(im.width,im.height);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,240,240);
-    const d=c.toDataURL("image/jpeg",.8);await setDoc(doc(db,"settings","main"),{photo:d},{merge:true});setPhoto(d);toast("تم حفظ الصورة")};im.src=r.result};
-  r.readAsDataURL(f);
+    const d=c.toDataURL("image/jpeg",.8);
+    try{await setDoc(doc(db,"settings","main"),{photo:d},{merge:true});S.photo=d;setPhoto(d);toast("تم حفظ الصورة")}catch(e){toast("تعذّر حفظ الصورة")}};
+    im.src=r.result};
+  r.readAsDataURL(f);e.target.value="";
 };
 
-// ---------- راوتر ----------
-let cur="list";
-function go(v,id){cur=v;$("#back").classList.toggle("hide",v=="list");$("#back").onclick=()=>go("list");
-  ({list,add:()=>form(),bulk,pass,stats:statsView,remind,notif,person:()=>person(id),edit:()=>form(id)})[v]();}
-$("#back").classList.add("hide");
+// ---------- الراوتر ----------
+function go(v,id){
+  cur=v;curId=id;
+  $("#back").classList.toggle("hide",v=="list");
+  $("#back").onclick=()=>v=="edit"?go("person",id):go("list");
+  scrollTo(0,0);
+  ({list,add:()=>form(),bulk,pass,stats:statsView,remind,notif,person:()=>person(id),edit:()=>form(id)})[v]();
+}
 
 // ---------- القائمة ----------
+const SORTS={"name,1":"الأبجدية (أ → ي)","name,0":"الأبجدية (ي → أ)","count,0":"الأكثر اعترافاً","count,1":"الأقل اعترافاً"};
 function list(){
   $("#title").textContent="الراعي";
-  const today=new Date(),bd=people.filter(p=>p.birthday&&new Date(p.birthday).getDate()==today.getDate()&&new Date(p.birthday).getMonth()==today.getMonth());
-  let a=people.filter(p=>!q||(p.name||"").includes(q)||(p.phone||"").includes(q));
-  a.sort((x,y)=>sortBy=="name"?(x.name||"").localeCompare(y.name||"","ar"):(x.confessions||[]).length-(y.confessions||[]).length);
-  if(!asc)a.reverse();
-  V.innerHTML=`${dueB()}${bd.map(p=>`<div class="banner">🎂 النهارده عيد ميلاد ${short(p.name)}</div>`).join("")}
-  <div class="bar"><input id="sq" placeholder="🔍 بحث بالاسم أو التليفون" value="${q}" style="margin:0">
-  <button class="l" id="sb">${asc?"↑":"↓"} ترتيب</button></div>
-  <div style="color:var(--mut);font-size:13px;margin-bottom:8px">${a.length} معترف — حسب ${sortBy=="name"?"الأبجدية":"عدد مرات الاعتراف"}</div>
-  ${a.map(p=>{const s=stats(p);return`<div class="card" data-id="${p.id}"><span class="dot" style="background:${s.color}"></span><div style="flex:1"><b>${short(p.name)}</b><br><small>${ago(s.days)}</small></div><div style="text-align:center"><div class="pct">${s.pct}%</div><small>${(p.confessions||[]).length} اعتراف</small></div></div>`}).join("")||'<p style="text-align:center;color:var(--mut);margin-top:40px">مفيش معترفين لسه — أضف من المنيو</p>'}`;
-  const sq=$("#sq");sq.oninput=()=>{q=sq.value;const pos=sq.selectionStart;list();const n=$("#sq");n.focus();n.setSelectionRange(pos,pos)};
-  V.querySelectorAll(".card").forEach(c=>c.onclick=()=>go("person",c.dataset.id));
-  $("#sb").onclick=e=>{
-    document.getElementById("sortm")?.remove();const m=document.createElement("div");m.id="sortm";
-    m.innerHTML=`<button data-s="name,1">↑ الأبجدية (أ → ي)</button><button data-s="name,0">↓ الأبجدية (ي → أ)</button><button data-s="count,0">↓ الأكثر اعترافاً</button><button data-s="count,1">↑ الأقل اعترافاً</button>`;
-    const r=e.target.getBoundingClientRect();m.style.top=r.bottom+window.scrollY+"px";m.style.left=r.left+"px";document.body.append(m);
-    m.querySelectorAll("button").forEach(b=>b.onclick=()=>{const[s,d]=b.dataset.s.split(",");sortBy=s;asc=d=="1";m.remove();list()});
-    setTimeout(()=>document.addEventListener("click",()=>m.remove(),{once:true}),0);
+  const t=new Date(),md=String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");
+  const bd=people.filter(p=>p.birthday&&p.birthday.slice(5,10)==md);
+  V.innerHTML=`${dueB()}${bd.map(p=>`<div class="banner">🎂 النهارده عيد ميلاد ${esc(short(p.name))}</div>`).join("")}
+  <div class="bar"><input id="sq" type="search" placeholder="ابحث بالاسم أو التليفون" value="${esc(q)}">
+  <button class="l" id="sb" aria-label="ترتيب"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 4 3 8M7 4l4 4M17 20V4M17 20l-4-4M17 20l4-4"/></svg>ترتيب</button></div>
+  <div id="res"></div>`;
+  const draw=()=>{
+    const nq=norm(q);
+    let a=people.filter(p=>!nq||norm(p.name).includes(nq)||(p.phone||"").includes(q.trim()));
+    a.sort((x,y)=>sortBy=="name"?(x.name||"").localeCompare(y.name||"","ar"):(x.confessions||[]).length-(y.confessions||[]).length);
+    if(!asc)a.reverse();
+    $("#res").innerHTML=`<div class="count">${a.length}${q?" من "+people.length:""} معترف — حسب ${sortBy=="name"?"الأبجدية":"عدد مرات الاعتراف"}</div>`+
+    (a.map(p=>{const s=stats(p);return`<div class="card" tabindex="0" data-id="${p.id}" style="--st:${s.color}"><div style="flex:1;min-width:0"><b>${esc(short(p.name))}</b><br><small>${ago(s.days)}</small></div><div class="side"><div class="pct" style="color:${s.color}">${s.pct}%</div><small>${(p.confessions||[]).length} مرة</small></div></div>`}).join("")||
+    `<p class="empty">${people.length?"مفيش نتيجة للبحث ده":"مفيش معترفين لسه<br>ضيف من المنيو ☰"}</p>`);
+    $("#res").querySelectorAll(".card").forEach(c=>{c.onclick=()=>go("person",c.dataset.id);c.onkeydown=e=>e.key=="Enter"&&c.click()});
   };
+  $("#sq").oninput=e=>{q=e.target.value;draw()};
+  $("#sb").onclick=e=>{
+    e.stopPropagation();
+    if($("#sortm"))return $("#sortm").remove();
+    const m=document.createElement("div");m.id="sortm";
+    const key=sortBy+","+(asc?1:0);
+    m.innerHTML=Object.entries(SORTS).map(([k,l])=>`<button data-s="${k}" class="${k==key?"on":""}">${k.endsWith(",1")?"↑":"↓"} ${l}</button>`).join("");
+    $(".bar").append(m);
+    m.querySelectorAll("button").forEach(b=>b.onclick=()=>{const[s,d]=b.dataset.s.split(",");sortBy=s;asc=d=="1";list()});
+    document.addEventListener("click",()=>m.remove(),{once:true});
+  };
+  draw();
 }
 
 // ---------- صفحة الشخص ----------
 function person(id){
   const p=people.find(x=>x.id==id);if(!p)return go("list");const s=stats(p);
   $("#title").textContent=short(p.name);
-  const row=(k,v)=>v?`<div class="row"><span style="color:var(--mut)">${k}</span><span>${v}</span></div>`:"";
-  V.innerHTML=`<div style="background:#fff;border-radius:16px;padding:14px">
-   <div style="text-align:center;margin-bottom:8px"><div class="pct" style="font-size:34px;color:${s.color}">${s.pct}%</div><small>نسبة الانتظام (شهرياً) — ${ago(s.days)}</small></div>
-   ${row("الاسم بالكامل",p.name)}${row("التليفون",p.phone?`<a href="tel:${p.phone}">${p.phone}</a>`:"")}${row("السن",p.age)}${row("عيد الميلاد",p.birthday)}${row("العنوان",p.address)}
-   ${row("الحالة الاجتماعية",p.marital+(p.marital=="متزوج"&&p.kids!=null?` — ${p.kids} أولاد`:""))}${row("ملاحظات",p.notes)}
-   <div style="margin-top:12px"><b>مرات الاعتراف (${(p.confessions||[]).length})</b><br>
-   ${dts(p).reverse().map(d=>`<span class="chip">${d} <a href="#" data-del="${d}" style="color:var(--bad);text-decoration:none">✕</a></span>`).join("")||"<small>لا يوجد</small>"}</div></div>
-   ${tasks.filter(t=>t.pid==id&&!t.done).map(t=>`<div class="banner" style="margin-top:10px">⏰ ${t.text}</div>`).join("")}
-   <div class="bar" style="margin-top:12px"><button class="g" id="c1" style="flex:1">✝ سجّل اعتراف اليوم</button><input type="date" id="cd" style="width:150px;margin:0"></div>
+  const row=(k,v)=>v?`<div class="row"><span>${k}</span><span>${v}</span></div>`:"";
+  const m=p.marital?esc(p.marital)+(p.marital=="متزوج"&&p.kids!==""&&p.kids!=null?" — "+kt(p.kids):""):"";
+  V.innerHTML=`<div class="panel">
+   <div class="ring" style="--p:${s.pct};--c:${s.color}"><span>${s.pct}%</span></div>
+   <div style="text-align:center;color:var(--mut);font-size:13px;margin-bottom:6px">نسبة الانتظام الشهري — ${ago(s.days)}</div>
+   ${row("الاسم بالكامل",esc(p.name))}${row("التليفون",p.phone?`<a href="tel:${esc(p.phone)}">${esc(p.phone)}</a>`:"")}${row("السن",esc(p.age))}${row("عيد الميلاد",esc(p.birthday))}${row("العنوان",esc(p.address))}
+   ${row("الحالة الاجتماعية",m)}${row("ملاحظات",esc(p.notes))}
+   <div style="margin-top:14px"><b style="color:var(--navy)">مرات الاعتراف (${(p.confessions||[]).length})</b><br>
+   ${dts(p).reverse().map(d=>`<span class="chip">${d} <a href="#" data-del="${d}" aria-label="حذف">✕</a></span>`).join("")||"<small style='color:var(--mut)'>لا يوجد</small>"}</div></div>
+   ${tasks.filter(t=>t.pid==id&&!t.done).map(t=>`<div class="banner" style="margin-top:10px">⏰ ${esc(t.text)}</div>`).join("")}
+   <div class="bar" style="margin-top:14px"><button class="g" id="c1" style="flex:1">✝ سجّل اعتراف اليوم</button><input type="date" id="cd" style="width:150px"></div>
    <div class="bar"><button class="l" id="ed" style="flex:1">تعديل</button><button class="l" id="rm" style="flex:1;color:var(--bad)">حذف</button></div>`;
-  const save=async d=>{await updateDoc(doc(db,"people",id),{confessions:[...new Set([...(p.confessions||[]),d])]});toast("تم التسجيل")};
-  $("#c1").onclick=()=>save($("#cd").value||new Date().toISOString().slice(0,10));
+  const save=async d=>{try{await updateDoc(doc(db,"people",id),{confessions:[...new Set([...(p.confessions||[]),d])]});toast("تم التسجيل")}catch(e){toast("تعذّر الحفظ")}};
+  const today=()=>{const n=new Date();return ym(n.getFullYear(),n.getMonth())+"-"+String(n.getDate()).padStart(2,"0")};
+  $("#c1").onclick=()=>save($("#cd").value||today());
   V.querySelectorAll("[data-del]").forEach(a=>a.onclick=async e=>{e.preventDefault();if(confirm("حذف هذا التاريخ؟"))await updateDoc(doc(db,"people",id),{confessions:p.confessions.filter(x=>x!=a.dataset.del)})});
   $("#ed").onclick=()=>go("edit",id);
   $("#rm").onclick=async()=>{if(confirm("حذف "+short(p.name)+" نهائياً؟")){await deleteDoc(doc(db,"people",id));go("list")}};
 }
 
-// ---------- إضافة/تعديل ----------
+// ---------- إضافة / تعديل ----------
 function form(id){
-  const p=id?people.find(x=>x.id==id):{};$("#title").textContent=id?"تعديل":"إضافة معترف";
-  const f=(k,l,t="text")=>`<label>${l}</label><input id="f_${k}" type="${t}" value="${p[k]??""}">`;
-  V.innerHTML=`<div style="background:#fff;border-radius:16px;padding:14px">
+  const p=id?people.find(x=>x.id==id)||{}:{};$("#title").textContent=id?"تعديل":"إضافة معترف";
+  const f=(k,l,t="text")=>`<label>${l}</label><input id="f_${k}" type="${t}" value="${esc(p[k])}">`;
+  V.innerHTML=`<div class="panel">
    ${f("name","الاسم بالكامل *")}${f("phone","التليفون","tel")}${f("age","السن","number")}${f("birthday","عيد الميلاد","date")}${f("address","العنوان")}
    <label>الحالة الاجتماعية</label><select id="f_marital">${["","أعزب","متزوج","أرمل","مخطوب"].map(o=>`<option ${p.marital==o?"selected":""}>${o}</option>`).join("")}</select>
    <div id="kw" class="${p.marital=="متزوج"?"":"hide"}">${f("kids","عدد الأولاد","number")}</div>
-   <label>ملاحظات</label><textarea id="f_notes" rows="3">${p.notes||""}</textarea>
-   <button class="g" id="sv" style="width:100%;margin-top:14px">${id?"حفظ":"حفظ وإضافة التالي"}</button></div>`;
+   <label>ملاحظات</label><textarea id="f_notes" rows="3">${esc(p.notes)}</textarea>
+   <button class="g" id="sv" style="width:100%;margin-top:16px">${id?"حفظ":"حفظ وإضافة التالي"}</button></div>`;
   $("#f_marital").onchange=e=>$("#kw").classList.toggle("hide",e.target.value!="متزوج");
   $("#sv").onclick=async()=>{
-    const g=k=>$("#f_"+k)?.value.trim(),d={name:g("name"),phone:g("phone"),age:g("age"),birthday:g("birthday"),address:g("address"),marital:g("marital"),kids:g("marital")=="متزوج"?g("kids"):"",notes:g("notes")};
+    const g=k=>$("#f_"+k)?.value.trim()||"",mar=g("marital");
+    const d={name:g("name"),phone:g("phone"),age:g("age"),birthday:g("birthday"),address:g("address"),marital:mar,kids:mar=="متزوج"?g("kids"):"",notes:g("notes")};
     if(!d.name)return toast("اكتب الاسم");
-    if(id)await updateDoc(doc(db,"people",id),d);else await addDoc(collection(db,"people"),{...d,confessions:[],created:new Date().toISOString()});
-    toast("تم الحفظ");id?go("person",id):form();
+    try{
+      if(id)await updateDoc(doc(db,"people",id),d);else await addDoc(collection(db,"people"),{...d,confessions:[],created:new Date().toISOString()});
+      toast("تم الحفظ");id?go("person",id):form();
+    }catch(e){toast("تعذّر الحفظ")}
   };
 }
 
 // ---------- إضافة جماعية ----------
 function bulk(){
   $("#title").textContent="إضافة جماعية";
-  V.innerHTML=`<div style="background:#fff;border-radius:16px;padding:14px"><p style="font-size:14px;color:var(--mut)">الصق قائمة، كل شخص في سطر: <b>الاسم، التليفون</b> (التليفون اختياري). تقدر تلصق من Excel كمان.</p>
+  V.innerHTML=`<div class="panel"><p style="font-size:14px;color:var(--mut);line-height:1.8">الصق قائمة، كل شخص في سطر: <b>الاسم، التليفون</b> (التليفون اختياري). تقدر تنسخ من Excel وتلصق، أو ترفع ملف CSV أو TXT.</p>
   <textarea id="bt" rows="12" placeholder="مينا جرجس سمير، 01012345678"></textarea>
-  <input type="file" id="bf" accept=".csv,.txt" style="margin-top:8px"><button class="g" id="bs" style="width:100%;margin-top:10px">إضافة الكل</button></div>`;
-  $("#bf").onchange=e=>e.target.files[0]?.text().then(t=>$("#bt").value=t);
+  <input type="file" id="bf" accept=".csv,.txt" style="margin-top:8px"><button class="g" id="bs" style="width:100%;margin-top:12px">إضافة الكل</button></div>`;
+  $("#bf").onchange=e=>e.target.files[0]?.text().then(t=>$("#bt").value=t.replace(/^\uFEFF/,""));
   $("#bs").onclick=async()=>{
-    const rows=$("#bt").value.split("\n").map(l=>l.split(/[,،\t]/).map(x=>x.trim())).filter(r=>r[0]);
-    if(!rows.length)return;
-    for(let i=0;i<rows.length;i+=400){const b=writeBatch(db);
-      rows.slice(i,i+400).forEach(r=>b.set(doc(collection(db,"people")),{name:r[0],phone:r[1]||"",confessions:[],created:new Date().toISOString()}));await b.commit()}
-    toast(`تمت إضافة ${rows.length}`);go("list");
+    const rows=$("#bt").value.split("\n").map(l=>l.split(/[,،;\t]/).map(x=>x.trim())).filter(r=>r[0]);
+    if(!rows.length)return toast("اللستة فاضية");
+    try{
+      for(let i=0;i<rows.length;i+=400){const b=writeBatch(db);
+        rows.slice(i,i+400).forEach(r=>b.set(doc(collection(db,"people")),{name:r[0],phone:r[1]||"",confessions:[],created:new Date().toISOString()}));await b.commit()}
+      toast(`تمت إضافة ${rows.length}`);go("list");
+    }catch(e){toast("تعذّرت الإضافة")}
   };
 }
 
-// ---------- تغيير الباسورد ----------
+// ---------- تغيير كلمة السر ----------
 function pass(){
   $("#title").textContent="تغيير كلمة السر";
-  V.innerHTML=`<div style="background:#fff;border-radius:16px;padding:14px"><label>كلمة السر الحالية</label><input id="p0" type="password"><label>كلمة السر الجديدة (6 حروف على الأقل)</label><input id="p1" type="password">
-  <button class="g" id="ps" style="width:100%;margin-top:14px">تغيير</button></div>`;
+  V.innerHTML=`<div class="panel"><label style="margin-top:0">كلمة السر الحالية</label><input id="p0" type="password" autocomplete="current-password"><label>كلمة السر الجديدة (6 حروف على الأقل)</label><input id="p1" type="password" autocomplete="new-password">
+  <button class="g" id="ps" style="width:100%;margin-top:16px">تغيير</button></div>`;
   $("#ps").onclick=async()=>{try{
     await reauthenticateWithCredential(auth.currentUser,EmailAuthProvider.credential(EMAIL,$("#p0").value));
     await updatePassword(auth.currentUser,$("#p1").value);toast("تم تغيير كلمة السر");go("list");
   }catch(e){toast("كلمة السر الحالية غلط أو الجديدة ضعيفة")}};
 }
 
-let tasks=[],S={},sm=3;
-const absM=p=>{const l=last(p)||p.created;return l?Math.floor((Date.now()-new Date(l))/864e5/30.44):0};
-const fmtM=m=>{const y=Math.floor(m/12),r=m%12;return[y?(y==1?"سنة":y==2?"سنتين":y+" سنين"):"",r?(r==1?"شهر":r==2?"شهرين":r+" شهور"):""].filter(Boolean).join(" و ")||"أقل من شهر"};
-const dueB=()=>tasks.filter(t=>!t.done&&t.due&&new Date(t.due)<=new Date()).map(t=>`<div class="banner">⏰ ${t.text}${t.pid?" — "+short(people.find(p=>p.id==t.pid)?.name):""}</div>`).join("");
-
+// ---------- الإحصائيات ----------
 function statsView(){
   $("#title").textContent="إحصائيات";
-  V.innerHTML=`<div class="card" style="cursor:default;display:block"><label style="margin:0">اللي بقالهم (شهور) أو أكتر</label>
-  <input id="sm" type="number" min="1" value="${sm}"><div style="margin-top:8px">${[1,2,3,6,12].map(n=>`<button class="l" data-n="${n}" style="margin:3px">${n==12?"سنة":n+" شهر"}</button>`).join("")}</div></div><div id="sl"></div>`;
+  V.innerHTML=`<div class="panel" style="margin-bottom:12px"><label style="margin-top:0">اللي بقالهم (شهور) أو أكتر ماجوش</label>
+  <input id="sm" type="number" min="1" value="${sm}"><div style="margin-top:10px">${[1,2,3,6,12].map(n=>`<button class="l" data-n="${n}" style="margin:3px">${n==12?"سنة":n==1?"شهر":n+" شهور"}</button>`).join("")}</div></div><div id="sl"></div>`;
   const draw=()=>{const a=people.map(p=>({p,m:absM(p)})).filter(x=>x.m>=sm).sort((x,y)=>y.m-x.m);
-    $("#sl").innerHTML=`<div style="color:var(--mut);font-size:13px;margin-bottom:8px">${a.length} شخص</div>`+a.map(x=>`<div class="card" data-id="${x.p.id}"><span class="dot" style="background:${x.m>=6?"var(--bad)":"var(--warn)"}"></span><div style="flex:1"><b>${short(x.p.name)}</b><br><small>بقاله ${fmtM(x.m)} ${last(x.p)?"من آخر اعتراف":"(لم يعترف منذ إضافته)"}</small></div><small>${x.p.phone||""}</small></div>`).join("");
-    $("#sl").querySelectorAll(".card").forEach(c=>c.onclick=()=>go("person",c.dataset.id))};
+    $("#sl").innerHTML=`<div class="count">${a.length} شخص</div>`+(a.map(x=>`<div class="card" tabindex="0" data-id="${x.p.id}" style="--st:${x.m>=6?"var(--bad)":"var(--warn)"}"><div style="flex:1;min-width:0"><b>${esc(short(x.p.name))}</b><br><small>بقاله ${fmtM(x.m)} ${last(x.p)?"من آخر اعتراف":"من وقت إضافته (لم يعترف)"}</small></div><small>${esc(x.p.phone)}</small></div>`).join("")||'<p class="empty">مفيش حد بالمدة دي 🎉</p>');
+    $("#sl").querySelectorAll(".card").forEach(c=>{c.onclick=()=>go("person",c.dataset.id);c.onkeydown=e=>e.key=="Enter"&&c.click()})};
   $("#sm").oninput=e=>{sm=Math.max(1,+e.target.value||1);draw()};
-  V.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{sm=+b.dataset.n;$("#sm").value=sm;draw()});draw();
+  V.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{sm=+b.dataset.n;$("#sm").value=sm;draw()});
+  draw();
 }
 
+// ---------- فكرني ----------
 function remind(){
   $("#title").textContent="فكرني";
-  const od=[...tasks].sort((a,b)=>(a.done-b.done)||((a.due||"9")>(b.due||"9")?1:-1));
-  V.innerHTML=`<div style="background:#fff;border-radius:16px;padding:14px;margin-bottom:12px"><input id="tt" placeholder="المهمة">
-  <select id="tp"><option value="">بدون ربط بشخص</option>${[...people].sort((a,b)=>(a.name||"").localeCompare(b.name||"","ar")).map(p=>`<option value="${p.id}">${p.name}</option>`).join("")}</select>
-  <label>منبه (اختياري)</label><input id="td" type="datetime-local"><button class="g" id="ta" style="width:100%;margin-top:10px">إضافة</button></div>
-  ${od.map(t=>`<div class="card" style="cursor:default"><input type="checkbox" data-c="${t.id}" ${t.done?"checked":""} style="width:22px;margin:0"><div style="flex:1;${t.done?"text-decoration:line-through;opacity:.5":""}"><b>${t.text}</b><br><small>${t.pid?short(people.find(p=>p.id==t.pid)?.name)+" • ":""}${t.due?new Date(t.due).toLocaleString("ar-EG",{dateStyle:"medium",timeStyle:"short"}):""}</small></div><button class="l" data-x="${t.id}">✕</button></div>`).join("")}`;
-  $("#ta").onclick=async()=>{const text=$("#tt").value.trim();if(!text)return;const d=$("#td").value;
-    await addDoc(collection(db,"tasks"),{text,pid:$("#tp").value,due:d?new Date(d).toISOString():"",done:false,notified:false})};
+  const od=[...tasks].sort((a,b)=>(!!a.done-!!b.done)||((a.due||"9")>(b.due||"9")?1:-1));
+  V.innerHTML=`<div class="panel" style="margin-bottom:12px"><input id="tt" placeholder="اكتب المهمة" style="margin-top:0">
+  <select id="tp"><option value="">بدون ربط بشخص</option>${[...people].sort((a,b)=>(a.name||"").localeCompare(b.name||"","ar")).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("")}</select>
+  <label>منبه (اختياري)</label><input id="td" type="datetime-local"><button class="g" id="ta" style="width:100%;margin-top:12px">إضافة</button></div>
+  ${od.map(t=>`<div class="card" style="cursor:default;border-inline-start-color:${t.done?"#ccc":"var(--gold)"}"><input type="checkbox" data-c="${t.id}" ${t.done?"checked":""} style="width:22px;margin:0" aria-label="تم"><div style="flex:1;min-width:0;${t.done?"text-decoration:line-through;opacity:.5":""}"><b>${esc(t.text)}</b><br><small>${t.pid?esc(short(people.find(p=>p.id==t.pid)?.name))+" • ":""}${t.due?new Date(t.due).toLocaleString("ar-EG",{dateStyle:"medium",timeStyle:"short"}):""}</small></div><button class="l" data-x="${t.id}" aria-label="حذف">✕</button></div>`).join("")}`;
+  $("#ta").onclick=async()=>{const text=$("#tt").value.trim();if(!text)return toast("اكتب المهمة");const d=$("#td").value;
+    try{await addDoc(collection(db,"tasks"),{text,pid:$("#tp").value,due:d?new Date(d).toISOString():"",done:false,notified:false})}catch(e){toast("تعذّرت الإضافة")}};
   V.querySelectorAll("[data-c]").forEach(c=>c.onchange=()=>updateDoc(doc(db,"tasks",c.dataset.c),{done:c.checked}));
   V.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>deleteDoc(doc(db,"tasks",b.dataset.x)));
 }
 
+// ---------- الإشعارات ----------
 function notif(){
   $("#title").textContent="الإشعارات";
-  const hrs=(v)=>[...Array(24).keys()].map(h=>`<option value="${h}" ${h==v?"selected":""}>${h}:00</option>`).join("");
-  V.innerHTML=`<div style="background:#fff;border-radius:16px;padding:14px">
+  const hrs=v=>[...Array(24).keys()].map(h=>`<option value="${h}" ${h==v?"selected":""}>${h}:00</option>`).join("");
+  V.innerHTML=`<div class="panel">
   <button class="g" id="en" style="width:100%">🔔 فعّل الإشعارات على الموبايل ده</button>
   <label>عيد الميلاد: ابعتلي الساعة</label><select id="n_bh">${hrs(S.birthdayHour??8)}</select>
   <label>إشعار الغائبين</label><select id="n_sf"><option value="off">مقفول</option><option value="daily">يومي</option><option value="weekly">أسبوعي (الأحد)</option><option value="monthly">شهري (أول الشهر)</option></select>
   <label>الساعة</label><select id="n_sh">${hrs(S.statsHour??9)}</select>
   <label>الغائب = بقاله (شهور) أو أكتر</label><input id="n_sm" type="number" min="1" value="${S.statsMonths??3}">
-  <button class="g" id="ns" style="width:100%;margin-top:14px">حفظ</button>
-  <p style="font-size:12px;color:var(--mut);margin-top:10px">منبهات «فكرني» بتتبعت في وقتها تلقائياً. الإشعارات محتاجة Cloud Function (ملف functions/index.js).</p></div>`;
+  <button class="g" id="ns" style="width:100%;margin-top:16px">حفظ</button>
+  <p style="font-size:12px;color:var(--mut);margin-top:12px;line-height:1.7">منبهات «فكرني» بتتبعت في وقتها تلقائياً. الإشعارات محتاجة Cloud Function (ملف functions/index.js).</p></div>`;
   $("#n_sf").value=S.statsFreq||"off";
   $("#en").onclick=async()=>{try{
     if(await Notification.requestPermission()!="granted")return toast("اسمح بالإشعارات من إعدادات المتصفح");
     const reg=await navigator.serviceWorker.register("firebase-messaging-sw.js");
     const t=await getToken(getMessaging(app),{vapidKey:VAPID,serviceWorkerRegistration:reg});
     await setDoc(doc(db,"settings","main"),{tokens:arrayUnion(t)},{merge:true});toast("تم تفعيل الإشعارات")}catch(e){toast("فشل التفعيل — راجع VAPID key")}};
-  $("#ns").onclick=async()=>{S={...S,birthdayHour:+$("#n_bh").value,statsFreq:$("#n_sf").value,statsHour:+$("#n_sh").value,statsMonths:+$("#n_sm").value||3};
-    const{photo,tokens,...o}=S;await setDoc(doc(db,"settings","main"),o,{merge:true});toast("تم الحفظ")};
+  $("#ns").onclick=async()=>{
+    S={...S,birthdayHour:+$("#n_bh").value,statsFreq:$("#n_sf").value,statsHour:+$("#n_sh").value,statsMonths:+$("#n_sm").value||3};
+    const{photo,tokens,...o}=S;
+    try{await setDoc(doc(db,"settings","main"),o,{merge:true});toast("تم الحفظ")}catch(e){toast("تعذّر الحفظ")}};
 }
-if("serviceWorker"in navigator&&location.protocol.startsWith("http"))addEventListener("load",()=>{});
 </script>
 </body>
 </html>
