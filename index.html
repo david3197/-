@@ -53,7 +53,11 @@ label{font-size:13px;color:var(--mut);display:block;margin-top:12px}
 #login .sub{color:#d9d3c0;margin-top:-6px}
 #login input{max-width:300px;text-align:center}
 #login button{min-width:140px}
-#lerr{color:#ff9d94;min-height:22px;text-align:center;max-width:300px}
+#lerr{color:#ff9d94;min-height:22px;text-align:center;max-width:300px;line-height:1.6}
+#ver{color:#8f9bb5;font-size:12px}
+.pwbox{position:relative;width:100%;max-width:300px}
+.pwbox input{margin:0;padding-inline-end:48px;text-align:center}
+.pwbox button{position:absolute;inset-inline-end:4px;top:50%;transform:translateY(-50%);background:none;padding:6px 10px;font-size:20px;min-width:0}
 .photo{width:112px;height:112px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;background:#2a3a63;display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--gold);overflow:hidden;cursor:pointer;flex:none}
 .photo.sm{width:84px;height:84px;font-size:34px;margin:6px auto 0}
 .photo img{width:100%;height:100%;object-fit:cover}
@@ -79,9 +83,13 @@ label{font-size:13px;color:var(--mut);display:block;margin-top:12px}
   <div class="photo" id="lphoto">✝</div>
   <h1>الراعي</h1>
   <div class="sub">أبونا يوسف فام</div>
-  <input id="pw" type="password" placeholder="كلمة السر" autocomplete="current-password">
+  <div class="pwbox">
+    <input id="pw" type="password" dir="ltr" placeholder="كلمة السر" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false">
+    <button type="button" id="eye" aria-label="إظهار كلمة السر">👁</button>
+  </div>
   <button class="g" id="lbtn">دخول</button>
   <div id="lerr"></div>
+  <div id="ver">النسخة 2 — جارٍ التحميل…</div>
 </div>
 
 <div id="app" class="hide">
@@ -110,6 +118,11 @@ label{font-size:13px;color:var(--mut);display:block;margin-top:12px}
 </div></div>
 <input type="file" id="pfile" accept="image/*" class="hide">
 
+<script>
+addEventListener("error",function(e){var x=document.getElementById("lerr");if(x)x.textContent="خطأ في الكود: "+(e.message||"")});
+addEventListener("unhandledrejection",function(e){var x=document.getElementById("lerr");if(x)x.textContent="خطأ: "+((e.reason&&(e.reason.code||e.reason.message))||e.reason)});
+setTimeout(function(){if(!window.__alraai){var x=document.getElementById("lerr");if(x)x.textContent="الكود مش شغال: مكتبة Firebase ماتحمّلتش (النت أو VPN أو حجب)، أو الملف مفتوح من الجهاز مش من رابط GitHub Pages."}},3000);
+</script>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged,updatePassword,reauthenticateWithCredential,EmailAuthProvider} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -130,6 +143,7 @@ const EMAIL="davidaziz319@gmail.com"; // لازم يكون نفس المستخد
 // ==============================
 
 const $=s=>document.querySelector(s),V=$("#view");
+window.__alraai=1;$("#ver").textContent="النسخة 2 ✓ الكود اشتغل";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const norm=s=>(s||"").toLowerCase().replace(/[أإآ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/[\u064B-\u0652]/g,"");
 const toast=m=>{$("#toast")?.remove();const t=document.createElement("div");t.id="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2400)};
@@ -176,6 +190,7 @@ $("#lbtn").onclick=async()=>{
   b.disabled=false;b.textContent="دخول";
 };
 $("#pw").onkeydown=e=>e.key=="Enter"&&$("#lbtn").click();
+$("#eye").onclick=()=>{const p=$("#pw"),s=p.type=="password";p.type=s?"text":"password";$("#eye").textContent=s?"🙈":"👁"};
 
 const rerender=()=>{if(cur=="list")list();else if(cur=="remind")remind();else if(cur=="person"&&curId)person(curId)};
 if(auth)onAuthStateChanged(auth,async u=>{
