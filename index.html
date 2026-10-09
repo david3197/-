@@ -91,7 +91,7 @@ label{font-size:13px;color:var(--mut);display:block;margin-top:12px}
   <div id="cnt">عدد الحروف المكتوبة: 0</div>
   <button class="g" id="lbtn">دخول</button>
   <div id="lerr"></div>
-  <div id="ver">النسخة 3 — جارٍ التحميل…</div>
+  <div id="ver">النسخة 4 — جارٍ التحميل…</div>
 </div>
 
 <div id="app" class="hide">
@@ -145,7 +145,7 @@ const EMAIL="davidaziz319@gmail.com"; // لازم يكون نفس المستخد
 // ==============================
 
 const $=s=>document.querySelector(s),V=$("#view");
-window.__alraai=1;$("#ver").textContent="النسخة 3 ✓ الكود اشتغل";
+window.__alraai=1;$("#ver").textContent="النسخة 4 ✓ الكود اشتغل";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const norm=s=>(s||"").toLowerCase().replace(/[أإآ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/[\u064B-\u0652]/g,"");
 const toast=m=>{$("#toast")?.remove();const t=document.createElement("div");t.id="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2400)};
@@ -192,7 +192,7 @@ $("#lbtn").onclick=async()=>{
   catch(e){$("#lerr").textContent=loginErr(e)}
   b.disabled=false;b.textContent="دخول";
 };
-$("#pw").onkeydown=e=>e.key=="Enter"&&$("#lbtn").click();
+$("#pw").onkeydown=e=>{if(e.key=="Enter")$("#lbtn").click()};
 $("#pw").oninput=()=>{$("#cnt").textContent="عدد الحروف المكتوبة: "+$("#pw").value.length};
 $("#eye").onclick=()=>{const p=$("#pw"),s=p.type=="password";p.type=s?"text":"password";$("#eye").textContent=s?"🙈":"👁"};
 
@@ -255,7 +255,7 @@ function list(){
     $("#res").innerHTML=`<div class="count">${a.length}${q?" من "+people.length:""} معترف — حسب ${sortBy=="name"?"الأبجدية":"عدد مرات الاعتراف"}</div>`+
     (a.map(p=>{const s=stats(p);return`<div class="card" tabindex="0" data-id="${p.id}" style="--st:${s.color}"><div style="flex:1;min-width:0"><b>${esc(short(p.name))}</b><br><small>${ago(s.days)}</small></div><div class="side"><div class="pct" style="color:${s.color}">${s.pct}%</div><small>${(p.confessions||[]).length} مرة</small></div></div>`}).join("")||
     `<p class="empty">${people.length?"مفيش نتيجة للبحث ده":"مفيش معترفين لسه<br>ضيف من المنيو ☰"}</p>`);
-    $("#res").querySelectorAll(".card").forEach(c=>{c.onclick=()=>go("person",c.dataset.id);c.onkeydown=e=>e.key=="Enter"&&c.click()});
+    $("#res").querySelectorAll(".card").forEach(c=>{c.onclick=()=>go("person",c.dataset.id);c.onkeydown=e=>{if(e.key=="Enter")c.click()}});
   };
   $("#sq").oninput=e=>{q=e.target.value;draw()};
   $("#sb").onclick=e=>{
@@ -353,7 +353,7 @@ function statsView(){
   <input id="sm" type="number" min="1" value="${sm}"><div style="margin-top:10px">${[1,2,3,6,12].map(n=>`<button class="l" data-n="${n}" style="margin:3px">${n==12?"سنة":n==1?"شهر":n+" شهور"}</button>`).join("")}</div></div><div id="sl"></div>`;
   const draw=()=>{const a=people.map(p=>({p,m:absM(p)})).filter(x=>x.m>=sm).sort((x,y)=>y.m-x.m);
     $("#sl").innerHTML=`<div class="count">${a.length} شخص</div>`+(a.map(x=>`<div class="card" tabindex="0" data-id="${x.p.id}" style="--st:${x.m>=6?"var(--bad)":"var(--warn)"}"><div style="flex:1;min-width:0"><b>${esc(short(x.p.name))}</b><br><small>بقاله ${fmtM(x.m)} ${last(x.p)?"من آخر اعتراف":"من وقت إضافته (لم يعترف)"}</small></div><small>${esc(x.p.phone)}</small></div>`).join("")||'<p class="empty">مفيش حد بالمدة دي 🎉</p>');
-    $("#sl").querySelectorAll(".card").forEach(c=>{c.onclick=()=>go("person",c.dataset.id);c.onkeydown=e=>e.key=="Enter"&&c.click()})};
+    $("#sl").querySelectorAll(".card").forEach(c=>{c.onclick=()=>go("person",c.dataset.id);c.onkeydown=e=>{if(e.key=="Enter")c.click()}})};
   $("#sm").oninput=e=>{sm=Math.max(1,+e.target.value||1);draw()};
   V.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{sm=+b.dataset.n;$("#sm").value=sm;draw()});
   draw();
