@@ -57,7 +57,8 @@ label{font-size:13px;color:var(--mut);display:block;margin-top:12px}
 #ver{color:#8f9bb5;font-size:12px}
 .pwbox{position:relative;width:100%;max-width:300px}
 .pwbox input{margin:0;padding-inline-end:48px;text-align:center}
-.pwbox button{position:absolute;inset-inline-end:4px;top:50%;transform:translateY(-50%);background:none;padding:6px 10px;font-size:20px;min-width:0}
+#login .pwbox button{position:absolute;inset-inline-end:4px;top:50%;transform:translateY(-50%);background:none;padding:6px 10px;font-size:20px;min-width:0;width:auto}
+#cnt{color:#8f9bb5;font-size:12px;margin-top:-6px}
 .photo{width:112px;height:112px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;background:#2a3a63;display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--gold);overflow:hidden;cursor:pointer;flex:none}
 .photo.sm{width:84px;height:84px;font-size:34px;margin:6px auto 0}
 .photo img{width:100%;height:100%;object-fit:cover}
@@ -87,9 +88,10 @@ label{font-size:13px;color:var(--mut);display:block;margin-top:12px}
     <input id="pw" type="password" dir="ltr" placeholder="كلمة السر" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false">
     <button type="button" id="eye" aria-label="إظهار كلمة السر">👁</button>
   </div>
+  <div id="cnt">عدد الحروف المكتوبة: 0</div>
   <button class="g" id="lbtn">دخول</button>
   <div id="lerr"></div>
-  <div id="ver">النسخة 2 — جارٍ التحميل…</div>
+  <div id="ver">النسخة 3 — جارٍ التحميل…</div>
 </div>
 
 <div id="app" class="hide">
@@ -143,7 +145,7 @@ const EMAIL="davidaziz319@gmail.com"; // لازم يكون نفس المستخد
 // ==============================
 
 const $=s=>document.querySelector(s),V=$("#view");
-window.__alraai=1;$("#ver").textContent="النسخة 2 ✓ الكود اشتغل";
+window.__alraai=1;$("#ver").textContent="النسخة 3 ✓ الكود اشتغل";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const norm=s=>(s||"").toLowerCase().replace(/[أإآ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/[\u064B-\u0652]/g,"");
 const toast=m=>{$("#toast")?.remove();const t=document.createElement("div");t.id="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2400)};
@@ -179,17 +181,19 @@ const dueB=()=>tasks.filter(t=>!t.done&&t.due&&new Date(t.due)<=new Date()).map(
 const loginErr=e=>{
   const c=e.code||"";
   if(c=="auth/invalid-credential"||c=="auth/wrong-password")return"كلمة السر غلط";
+  if(c=="auth/missing-password")return"اكتب كلمة السر أولاً";
   if(c=="auth/user-not-found")return"المستخدم ده مش موجود في Firebase (راجع Authentication > Users)";
   if(c=="auth/too-many-requests")return"محاولات كتير، استنى شوية وجرّب تاني";
   return"خطأ: "+(c||e.message);
 };
 $("#lbtn").onclick=async()=>{
-  if(!auth)return;const b=$("#lbtn");$("#lerr").textContent="";b.disabled=true;b.textContent="جارٍ الدخول…";
+  if(!auth)return;if(!$("#pw").value){$("#lerr").textContent="اكتب كلمة السر أولاً";return}const b=$("#lbtn");$("#lerr").textContent="";b.disabled=true;b.textContent="جارٍ الدخول…";
   try{await signInWithEmailAndPassword(auth,EMAIL,$("#pw").value);$("#pw").value=""}
   catch(e){$("#lerr").textContent=loginErr(e)}
   b.disabled=false;b.textContent="دخول";
 };
 $("#pw").onkeydown=e=>e.key=="Enter"&&$("#lbtn").click();
+$("#pw").oninput=()=>{$("#cnt").textContent="عدد الحروف المكتوبة: "+$("#pw").value.length};
 $("#eye").onclick=()=>{const p=$("#pw"),s=p.type=="password";p.type=s?"text":"password";$("#eye").textContent=s?"🙈":"👁"};
 
 const rerender=()=>{if(cur=="list")list();else if(cur=="remind")remind();else if(cur=="person"&&curId)person(curId)};
